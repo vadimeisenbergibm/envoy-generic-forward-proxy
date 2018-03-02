@@ -1,27 +1,12 @@
 apiVersion: v1
-kind: Service
-metadata:
-  name: forward-proxy
-spec:
-  ports:
-  - port: 80
-    name: http
-  - port: 443
-    name: https
-  selector:
-    app: forward-proxy
----
-apiVersion: v1
 kind: Pod
 metadata:
-  name: forward-proxy
-  labels:
-    app: forward-proxy
+  name: sidecar-forward-proxy
 spec:
   containers:
   - name: nginx
     image: vadimeisenbergibm/nginx-forward-proxy
   - name: envoy
-    image: vadimeisenbergibm/envoy-forward-proxy
+    image: vadimeisenbergibm/envoy-sidecar-forward-proxy
     securityContext:
       privileged: true
