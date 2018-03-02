@@ -31,12 +31,18 @@ Second, Envoy will not be able to set SNI correctly for an arbitrary site, based
 
 Using Envoy in tandem with Nginx seems to satisfy the requirements cleanly. Envoy will direct all the traffic to Nginx instances running as forward proxies. Most of the features of Envoy, in particular its [HTTP Filters](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http_filters) will be available, while Nginx will complement Envoy, providing missing features for proxying to arbitrary sites.
 
+In this sample, I demonstrate two cases:
+1. Using Envoy with nginx as a generic forward proxy for other pods (other pods can access arbitrary hosts via the forward proxy)
+2. Using Envoy with nginx as a sidecar generic forward proxy (the application in the pod can access arbitrary hosts via the forward proxy)
+
 ## Building and Pushing to the docker hub
 Perform this step if you want to run your own version of the forward proxy. Alternatively, skip this step and use the version in https://hub.docker.com/u/vadimeisenbergibm .
 
 `./build_and_push_docker.sh <your docker hub user name>`.
 
-## Deployment to Kubernetes
+## Envoy as a generic forward proxy to other pods
+
+### Deployment to Kubernetes
 1. Edit `forward_proxy.yaml`: replace `vadimeisenbergibm` with your docker hub username. Alternatively, just use the images from https://hub.docker.com/u/vadimeisenbergibm .
 
 2. Deploy the forward proxy:
@@ -45,7 +51,6 @@ Perform this step if you want to run your own version of the forward proxy. Alte
 3. Deploy a pod to issue `curl` commands. I use the `sleep` pod from the [Istio samples](https://github.com/istio/istio/tree/master/samples), however any other pod with `curl` installed is good enough.
 `kubectl apply -f https://raw.githubusercontent.com/istio/istio/master/samples/sleep/sleep.yaml`
 
-## Testing
 ### Test HTTP
 * From any container with curl perform:
 
@@ -90,10 +95,17 @@ Perform this step if you want to run your own version of the forward proxy. Alte
 
   Note that we performed HTTP call and used HTTP proxy to connect to edition.cnn.com via HTTPS. We cannot to `forward-proxy` by HTTP, and the `forward-proxy` performs TLS origination for us.
 
-### Testing inside the forward-proxy
-Get a shell into the `envoy` container of the `forward-proxy` pod:
+## Envoy as a sidecar generic forward proxy
+### Deployment to Kubernetes
+1. Edit `sidecar_forward_proxy.yaml`: replace `vadimeisenbergibm` with your docker hub username. Alternatively, just use the images from https://hub.docker.com/u/vadimeisenbergibm .
 
-`kubectl exec -it forward-proxy -c envoy bash`
+2. Deploy the forward proxy:
+`kubectl apply -f sidecar_forward_proxy.yaml`
+
+### Testing
+Get a shell into the `sleep` container of the `sidecar-forward-proxy` pod:
+
+`kubectl exec -it sidecar-forward-proxy -c sleep bash`
 
 * Test the nginx proxy
 
@@ -101,15 +113,13 @@ Get a shell into the `envoy` container of the `forward-proxy` pod:
 
 * Test the envoy proxy with nginx proxy. Note that here the traffic is catched by iptables and forwarded to the Envoy proxy. Verify in nginx logs and Envoy stats that the traffic indeed passed thru Envoy and nginx.
 
-  `su - clientuser`
-
   `curl httpbin.org/headers -H "foo:bar"`
 
   `curl edition.cnn.com:443`
 
   Note the HTTP call to the port 443. Nginx will perform TLS origination.
 
-### Technical details
+## Technical details
 * allow_absolute_urls directive
 * proxy_ssl_server_name directive
 * nginx listens on the localhost, to reduce attack vectors.
