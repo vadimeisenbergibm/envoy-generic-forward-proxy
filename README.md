@@ -10,7 +10,7 @@ Suppose we need a Kubernetes service named `forward-proxy`. The service will be 
 2. The following request should be proxied to https://edition.cnn.com, with TLS origination performed by the forward proxy:
   `curl -v forward-proxy:443 -H "host: edition.cnn.com"`
 
-  Note that the request to the forward proxy is sent over HTTP. The forward proxy opens a TLS connection to
+   Note that the request to the forward proxy is sent over HTTP. The forward proxy opens a TLS connection to
   https://edition.cnn.com .
 
 3. A nice-to-have feature: use the `forward_proxy` as HTTP proxy.
@@ -58,12 +58,15 @@ Perform this step if you want to run your own version of the forward proxy. Alte
 * After each call, check the logs to verify that the traffic indeed went through both Envoy and nginx:
 
   * Nginx logs
+  
     `kubectl logs forward-proxy nginx`
 
-     you should log lines similar to
+     you should see log lines similar to:
+
      `127.0.0.1 - - [02/Mar/2018:06:32:39 +0000] "GET http://httpbin.org/headers HTTP/1.1" 200 191 "-" "curl/7.47.0"`
 
   * Envoy stats
+
     `kubectl exec -it forward-proxy -c envoy -- curl localhost:8001/stats | grep http.eress_http.downstream_rq`
 
     Check the number of `http.eress_http.downstream_rq_2xx` - the number of times 2xx code was returned.
@@ -104,4 +107,4 @@ Get a shell into the `envoy` container of the `forward-proxy` pod:
 
   `curl edition.cnn.com:443`
 
-Note the HTTP call to the port 443. Nginx will perform TLS origination.
+  Note the HTTP call to the port 443. Nginx will perform TLS origination.
