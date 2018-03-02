@@ -1,4 +1,4 @@
-# Envoy as generic forward proxy
+# Envoy as a generic forward proxy
 This sample shows how [Envoy](https://www.envoyproxy.io) can be used as a generic forward proxy on Kubernetes. "Generic" means that it will allow proxying any host, not a predefined set of hosts.
 
 ## Introduction
