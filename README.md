@@ -58,7 +58,7 @@ Perform this step if you want to run your own version of the forward proxy. Alte
 * After each call, check the logs to verify that the traffic indeed went through both Envoy and nginx:
 
   * Nginx logs
-  
+
     `kubectl logs forward-proxy nginx`
 
      you should see log lines similar to:
@@ -108,3 +108,9 @@ Get a shell into the `envoy` container of the `forward-proxy` pod:
   `curl edition.cnn.com:443`
 
   Note the HTTP call to the port 443. Nginx will perform TLS origination.
+
+### Technical details
+* allow_absolute_urls directive
+* proxy_ssl_server_name directive
+* nginx listens on the localhost, to reduce attack vectors.
+* iptables catch all the traffic, except for the users _root_ and _www-data_. Excluding _www-data_ from envoy's traffic control is required since nginx workers run as _www-data_.
