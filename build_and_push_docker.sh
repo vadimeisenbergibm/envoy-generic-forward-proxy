@@ -24,5 +24,8 @@ echo using $DOCKER_HUB_USER as the user of hub.docker.com
 docker build --tag ${DOCKER_HUB_USER}/envoy-sidecar-forward-proxy:latest envoy_sidecar_forward_proxy
 docker push ${DOCKER_HUB_USER}/envoy-sidecar-forward-proxy:latest
 
+docker build --tag ${DOCKER_HUB_USER}/envoy-forward-proxy:latest envoy_forward_proxy
+docker push ${DOCKER_HUB_USER}/envoy-forward-proxy:latest
+
 docker build --tag ${DOCKER_HUB_USER}/nginx-forward-proxy:latest nginx_forward_proxy
 docker push ${DOCKER_HUB_USER}/nginx-forward-proxy:latest
