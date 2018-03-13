@@ -24,3 +24,7 @@ spec:
     image: vadimeisenbergibm/envoy-sidecar-forward-proxy
     securityContext:
       privileged: true
+  - name: sleep # from https://github.com/istio/istio/tree/master/samples/sleep
+    image: tutum/curl
+    command: ["/bin/sleep","infinity"]
+    imagePullPolicy: IfNotPresent
