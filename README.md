@@ -93,7 +93,7 @@ Perform this step if you want to run your own version of the forward proxy. Alte
 
   `http_proxy=forward-proxy:443 curl -v edition.cnn.com`
 
-  Note that we performed HTTP call and used HTTP proxy to connect to edition.cnn.com via HTTPS. We cannot to `forward-proxy` by HTTP, and the `forward-proxy` performs TLS origination for us.
+  Note that we performed HTTP call and used an HTTP proxy (`http_proxy`) to connect to edition.cnn.com via HTTPS. We send requests by HTTP, and the `forward-proxy` performs TLS origination for us.
 
 ## Envoy as a sidecar generic forward proxy
 ### Deployment to Kubernetes
