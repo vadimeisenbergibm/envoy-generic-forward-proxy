@@ -8,7 +8,7 @@
           "name": "http_connection_manager",
           "config": {
             "codec_type": "auto",
-            "stat_prefix": "eress_http",
+            "stat_prefix": "forward_http",
             "http1_settings": {
               "allow_absolute_url": true
             },
@@ -46,7 +46,7 @@
           "name": "http_connection_manager",
           "config": {
             "codec_type": "auto",
-            "stat_prefix": "egress_https",
+            "stat_prefix": "forward_https",
             "http1_settings": {
               "allow_absolute_url": true
             },
