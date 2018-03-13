@@ -111,13 +111,28 @@ Get a shell into the `sleep` container of the `sidecar-forward-proxy` pod:
 
   `http_proxy=localhost:8080 curl http://httpbin.org/headers -H "foo: bar"`
 
-* Test the envoy proxy with nginx proxy. Note that here the traffic is catched by iptables and forwarded to the Envoy proxy. Verify in nginx logs and Envoy stats that the traffic indeed passed thru Envoy and nginx.
+* Test the envoy proxy with nginx proxy. Note that here the traffic is catched by iptables and forwarded to the Envoy proxy.
 
   `curl httpbin.org/headers -H "foo:bar"`
 
   `curl edition.cnn.com:443`
 
   Note the HTTP call to the port 443. Nginx will perform TLS origination.
+
+*  Verify in nginx logs and Envoy stats that the traffic indeed passed thru Envoy and nginx.
+   * Nginx logs
+
+     `kubectl logs sidecar-forward-proxy nginx`
+
+      you should see log lines similar to:
+
+      `127.0.0.1 - - [02/Mar/2018:06:32:39 +0000] "GET http://httpbin.org/headers HTTP/1.1" 200 191 "-" "curl/7.47.0"`
+
+    * Envoy stats
+
+      `kubectl exec -it sidecar-forward-proxy -c envoy -- curl localhost:8001/stats | grep http.eress_http.downstream_rq`
+
+       Check the number of `http.eress_http.downstream_rq_2xx` - the number of times 2xx code was returned.
 
 ## Technical details
 * allow_absolute_urls directive
