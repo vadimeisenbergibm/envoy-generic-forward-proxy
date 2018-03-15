@@ -2,6 +2,7 @@
   "listeners": [
     {
       "address": "tcp://0.0.0.0:80",
+      "bind_to_port": false,
       "filters": [
         {
           "type": "read",
@@ -40,6 +41,7 @@
     },
     {
       "address": "tcp://0.0.0.0:443",
+      "bind_to_port": false,
       "filters": [
         {
           "type": "read",
