@@ -53,7 +53,7 @@ Perform this step if you want to run your own version of the forward proxy. Alte
 2. Deploy the forward proxy:
 `kubectl apply -f forward_proxy.yaml`
 
-3. Deploy a pod to issue `curl` commands. I use the `sleep` pod from the [Istio samples](https://github.com/istio/istio/tree/master/samples), extended to add a non-root user (see [the Dockerfile](https://github.com/vadimeisenbergibm/envoy-generic-forward-proxy/blob/master/sleep/Dockerfile)). However, any other pod with `curl` installed is good enough. For the sidecar proxy example, the container with curl should run as a non-root user.
+3. Deploy a pod to issue `curl` commands. I use the `sleep` pod from the [Istio samples](https://github.com/istio/istio/tree/master/samples). Any other pod with `curl` installed is good enough.
 `kubectl apply -f https://raw.githubusercontent.com/istio/istio/master/samples/sleep/sleep.yaml`
 
 ### Test HTTP
