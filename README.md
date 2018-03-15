@@ -16,7 +16,7 @@ Suppose we need a Kubernetes service named `forward-proxy`. The service will be 
 3. A nice-to-have feature: use the `forward_proxy` as HTTP proxy.
   `http_proxy=forward-proxy:80 curl httpbin.org/headers -H "foo: bar"`
 
-4. Another nice-to-have feature, to show Envoy's capabilities as a sidecar proxy. Transparently catch all the traffic inside the pod with the `forward-proxy` container and direct the traffic through the proxy. Use `iptables` for directing the traffic.
+4. Another nice-to-have feature, to show Envoy's capabilities as a sidecar proxy. Transparently catch all the traffic inside a pod with the `forward-proxy` container and direct the traffic through the proxy. Use `iptables` for directing the traffic.
 
 5. Use Envoy's filters for monitoring, transforming, policing the traffic that goes through the forward proxy.
 
