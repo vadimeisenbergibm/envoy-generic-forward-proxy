@@ -17,7 +17,11 @@
 set -o errexit
 set -o nounset
 
+ENVOY_UID=$1
+ENVOY_USER=$2
 ENVOY_PORT=15001
+NGINX_MAIN_UID=$(id -u root)
+NGINX_WORKER_UID=$(id -u www-data)
 
-./set_iptables.sh $ENVOY_PORT `id -u root` `id -u www-data`
-envoy -c envoy_config.json
+./set_iptables.sh $ENVOY_PORT $ENVOY_UID $NGINX_MAIN_UID $NGINX_WORKER_UID
+su $ENVOY_USER -c 'envoy -c envoy_config.json'
