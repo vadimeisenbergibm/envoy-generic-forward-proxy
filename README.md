@@ -144,7 +144,7 @@ Get a shell into the `sleep` container of the `sidecar-forward-proxy` pod:
 ## Code Organization
 * _envoy_forward_proxy_ contains Envoy's configuration and a Dockerfile for the case of the forward proxy for other pods.
 * _envoy_sidecar_forward_proxy_ contains Envoy's configuration, a Dockerfile and scripts to direct the traffic inside the pod by _iptables_ for the case of the sidecar forward proxy.
-* _nginx_forward_proxy_ contains NGINX's configuration and a Dockerfile for NGINX as a forward proxy
+* _nginx_forward_proxy_ contains NGINX's configuration and a Dockerfile for NGINX as a forward proxy.
 * _sleep_ contains a Docker file, which extends [the Istio sleep sample](https://github.com/istio/istio/tree/master/samples/sleep), by adding a non-root user.
 
 ## Technical details
