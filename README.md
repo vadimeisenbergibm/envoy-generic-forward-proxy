@@ -70,12 +70,12 @@ Perform this step if you want to run your own version of the forward proxy. Alte
 
      `127.0.0.1 - - [02/Mar/2018:06:32:39 +0000] "GET http://httpbin.org/headers HTTP/1.1" 200 191 "-" "curl/7.47.0"`
 
-  * Envoy stats
+  * Envoy stats, from any pod with curl:
 
-    * for HTTP: `kubectl exec -it forward-proxy -c envoy -- curl localhost:8001/stats | grep http.forward_http.downstream_rq`
+    * for HTTP: `curl forward-proxy:8001/stats | grep http.forward_http.downstream_rq`
 
       Check the number of `http.forward_http.downstream_rq_2xx` - the number of times 2xx code was returned.
-    * for HTTPS: `kubectl exec -it forward-proxy -c envoy -- curl localhost:8001/stats | grep http.forward_https.downstream_rq`
+    * for HTTPS: `curl forward-proxy:8001/stats | grep http.forward_https.downstream_rq`
 
       Check the number of `http.forward_https.downstream_rq_2xx` - the number of times 2xx code was returned.
 
