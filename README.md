@@ -72,9 +72,12 @@ Perform this step if you want to run your own version of the forward proxy. Alte
 
   * Envoy stats
 
-    `kubectl exec -it forward-proxy -c envoy -- curl localhost:8001/stats | grep http.forward_http.downstream_rq`
+    * for HTTP: `kubectl exec -it forward-proxy -c envoy -- curl localhost:8001/stats | grep http.forward_http.downstream_rq`
 
-    Check the number of `http.forward_http.downstream_rq_2xx` - the number of times 2xx code was returned.
+      Check the number of `http.forward_http.downstream_rq_2xx` - the number of times 2xx code was returned.
+    * for HTTPS: `kubectl exec -it forward-proxy -c envoy -- curl localhost:8001/stats | grep http.forward_https.downstream_rq`
+
+      Check the number of `http.forward_https.downstream_rq_2xx` - the number of times 2xx code was returned.
 
 ### Test HTTPS (TLS origination)
   `curl -v forward-proxy:80 -H "host: edition.cnn.com"`
@@ -126,9 +129,12 @@ Get a shell into the `sleep` container of the `sidecar-forward-proxy` pod:
 
     * Envoy stats
 
-      `kubectl exec -it sidecar-forward-proxy -c envoy -- curl localhost:8001/stats | grep http.forward_http.downstream_rq`
+      * for HTTP: `kubectl exec -it sidecar-forward-proxy -c envoy -- curl localhost:8001/stats | grep http.forward_http.downstream_rq`
 
-       Check the number of `http.forward_http.downstream_rq_2xx` - the number of times 2xx code was returned.
+        Check the number of `http.forward_http.downstream_rq_2xx` - the number of times 2xx code was returned.
+      * for HTTPS: `kubectl exec -it sidecar-forward-proxy -c envoy -- curl localhost:8001/stats | grep http.forward_https.downstream_rq`
+
+        Check the number of `http.forward_https.downstream_rq_2xx` - the number of times 2xx code was returned.
 
 ## Technical details
 * allow_absolute_urls directive
