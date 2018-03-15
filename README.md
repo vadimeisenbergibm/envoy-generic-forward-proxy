@@ -29,7 +29,7 @@ Second, Envoy will not be able to set SNI correctly for an arbitrary site, based
 
 8. When performing TLS origination, the `forward-proxy` must set SNI according to the Host header.
 
-Using Envoy in tandem with NGINX seems to satisfy the requirements cleanly. Envoy will direct all the traffic to NGINX instances running as forward proxies. Most of the features of Envoy, in particular its [HTTP Filters](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http_filters) will be available, while NGINX will complement Envoy, providing missing features for proxying to arbitrary sites.
+Using Envoy in tandem with NGINX seems to satisfy the requirements cleanly. Envoy will direct all the traffic to NGINX instances running as forward proxies. Most of the features of Envoy, in particular its [HTTP Filters](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http_filters), will be available, while NGINX will complement Envoy, providing missing features for proxying to arbitrary sites.
 
 In this sample, I demonstrate two cases:
 1. Using Envoy with NGINX as a generic forward proxy for other pods (other pods can access arbitrary hosts via the forward proxy)
