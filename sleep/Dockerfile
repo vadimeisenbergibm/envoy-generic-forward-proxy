@@ -1,4 +1,4 @@
-# Copyright IBM Corporation 2018
+# Copyright IBM Corporation 2017,2018
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,21 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: v1
-kind: Pod
-metadata:
-  name: sidecar-forward-proxy
-spec:
-  containers:
-  - name: nginx
-    image: vadimeisenbergibm/nginx-forward-proxy
-  - name: envoy
-    image: vadimeisenbergibm/envoy-sidecar-forward-proxy
-    securityContext:
-      privileged: true
-  - name: sleep # from https://github.com/istio/istio/tree/master/samples/sleep
-    image: vadimeisenbergibm/sleep
-    command: ["/bin/sleep","infinity"]
-    imagePullPolicy: IfNotPresent
-    securityContext:
-      runAsUser: 2000
+FROM tutum/curl
+ENV SLEEP_USER sleepuser
+ENV SLEEP_UID  2000
+RUN useradd -ms /bin/bash $SLEEP_USER -u $SLEEP_UID
