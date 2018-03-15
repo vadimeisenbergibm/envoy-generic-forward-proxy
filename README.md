@@ -137,7 +137,7 @@ Get a shell into the `sleep` container of the `sidecar-forward-proxy` pod:
         Check the number of `http.forward_https.downstream_rq_2xx` - the number of times 2xx code was returned.
 
 ## Technical details
-* allow_absolute_urls directive for the forward proxy for other pods
+* `allow_absolute_urls` directive of `http1_settings` of `http_connection_manager` filter is set to true, in the envoy's configuration of the forward proxy for other pods, so the other pods could use `forward-proxy` as their `http_proxy`.
 * set bind_to_port to `false` for ports 80 and 443 for the sidecar proxy, while setting bind_to_port to `true` for a listener to the port 15001 with `use_original_dst` set to true. The outbound traffic in the pod of the sidecar will be directed by _iptables_ to that port.
 * proxy_ssl_server_name directive
 * nginx listens on the localhost, to reduce attack vectors.
