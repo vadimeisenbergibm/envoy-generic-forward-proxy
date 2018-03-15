@@ -110,7 +110,7 @@ Get a shell into the `sleep` container of the `sidecar-forward-proxy` pod:
 
 `kubectl exec -it sidecar-forward-proxy -c sleep bash`
 
-* Test the envoy proxy with NGINX proxy. Note that here the traffic is catched by iptables and forwarded to the Envoy proxy.
+* Test the Envoy proxy with NGINX proxy. Note that here the traffic is catched by iptables and forwarded to the Envoy proxy.
 
   `curl httpbin.org/headers -H "foo:bar"`
 
@@ -137,9 +137,9 @@ Get a shell into the `sleep` container of the `sidecar-forward-proxy` pod:
         Check the number of `http.forward_https.downstream_rq_2xx` - the number of times 2xx code was returned.
 
 ## Technical details
-* `allow_absolute_urls` directive of `http1_settings` of `config` of `http_connection_manager` filter is set to true, in the envoy's configuration of the forward proxy for the other pods, so the other pods could use `forward-proxy` as their `http_proxy`.
-* I set `bind_to_port` to `false` for ports 80 and 443 for the sidecar proxy, while setting `bind_to_port` to `true` for a listener on the port 15001 with `use_original_dst` set to `true`. The outbound traffic in the pod of the sidecar will be directed by _iptables_ to the port 15001, and from there redirected by _envoy_ to the listeners on the ports 80 and 443.
-  Compare it with the forward proxy for the other pods. For that proxy there is no need to listen on the port 15001, and `bind_to_port` is `true` by default for the ports 80 and 443, the envoy binds to these ports to accept incoming traffic into the `forward_proxy`.
+* `allow_absolute_urls` directive of `http1_settings` of `config` of `http_connection_manager` filter is set to true, in the Envoy's configuration of the forward proxy for the other pods, so the other pods could use `forward-proxy` as their `http_proxy`.
+* I set `bind_to_port` to `false` for ports 80 and 443 for the sidecar proxy, while setting `bind_to_port` to `true` for a listener on the port 15001 with `use_original_dst` set to `true`. The outbound traffic in the pod of the sidecar will be directed by _iptables_ to the port 15001, and from there redirected by _Envoy_ to the listeners on the ports 80 and 443.
+  Compare it with the forward proxy for the other pods. For that proxy there is no need to listen on the port 15001, and `bind_to_port` is `true` by default for the ports 80 and 443, the Envoy binds to these ports to accept incoming traffic into the `forward_proxy`.
 * I set `proxy_ssl_server_name` directive of NGINX to `on`, to set SNI for the port for TLS origination.
 * NGINX listens on the localhost, to reduce attack vectors. It is not possible to connect to NGINX from outside of the pod.
-* iptables catch all the traffic, except for the users _root_, _www-data_ , and for a specially created _envoyuser_. Excluding _www-data_ from envoy's traffic control is required since NGINX workers run as _www-data_. Excluding _root_ from envoy's traffic control is required since NGINX itself has to run as root. Envoy runs as _envoyuser_, and its traffic must not be controlled by envoy (otherwise an infinite loop will be created). The app container, _sleep_ runs as _sleepuser_. Note that for the apps that run as _root_ the traffic will not be handled by the sidecar proxy, since _root_ is excluded by iptables to be redirected to envoy (the requirement of NGINX).
+* iptables catch all the traffic, except for the users _root_, _www-data_ , and for a specially created _envoyuser_. Excluding _www-data_ from Envoy's traffic control is required since NGINX workers run as _www-data_. Excluding _root_ from Envoy's traffic control is required since NGINX itself has to run as root. Envoy runs as _envoyuser_, and its traffic must not be controlled by Envoy (otherwise an infinite loop will be created). The app container, _sleep_ runs as _sleepuser_. Note that for the apps that run as _root_ the traffic will not be handled by the sidecar proxy, since _root_ is excluded by iptables to be redirected to Envoy (the requirement of NGINX).
