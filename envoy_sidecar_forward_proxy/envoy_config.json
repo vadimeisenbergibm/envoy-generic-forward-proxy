@@ -10,9 +10,6 @@
           "config": {
             "codec_type": "auto",
             "stat_prefix": "forward_http",
-            "http1_settings": {
-              "allow_absolute_url": true
-            },
             "route_config": {
               "virtual_hosts": [
                 {
@@ -49,9 +46,6 @@
           "config": {
             "codec_type": "auto",
             "stat_prefix": "forward_https",
-            "http1_settings": {
-              "allow_absolute_url": true
-            },
             "route_config": {
               "virtual_hosts": [
                   {
