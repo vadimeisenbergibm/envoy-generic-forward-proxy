@@ -107,10 +107,6 @@ Get a shell into the `sleep` container of the `sidecar-forward-proxy` pod:
 
 `kubectl exec -it sidecar-forward-proxy -c sleep bash`
 
-* Test the nginx proxy
-
-  `http_proxy=localhost:8080 curl http://httpbin.org/headers -H "foo: bar"`
-
 * Test the envoy proxy with nginx proxy. Note that here the traffic is catched by iptables and forwarded to the Envoy proxy.
 
   `curl httpbin.org/headers -H "foo:bar"`
