@@ -22,6 +22,8 @@ spec:
     name: http
   - port: 443
     name: https
+  - port: 8001 # for envoy statistics
+    name: http-envoy-stats
   selector:
     app: forward-proxy
 ---
