@@ -4,16 +4,16 @@ This sample shows how [Envoy](https://www.envoyproxy.io) can be used as a generi
 ## Introduction
 Suppose we need a Kubernetes service named `forward-proxy`. The service will be used as a forward proxy to *an arbitrary host*. The service must satisfy the following requirements:
 
-1. The following request should be proxied to httbin.org/headers:
+1. The following request should be proxied to `httbin.org/headers`:
   `curl forward-proxy/headers -H "host: httpbin.org" -H "foo: bar"`
 
-2. The following request should be proxied to https://edition.cnn.com, with TLS origination performed by the forward proxy:
+2. The following request should be proxied to https://edition.cnn.com, with TLS origination performed by `forward-proxy`:
   `curl -v forward-proxy:443 -H "host: edition.cnn.com"`
 
    Note that the request to the forward proxy is sent over HTTP. The forward proxy opens a TLS connection to
   https://edition.cnn.com .
 
-3. A nice-to-have feature: use the `forward_proxy` as HTTP proxy.
+3. A nice-to-have feature: use `forward-proxy` as HTTP proxy.
   `http_proxy=forward-proxy:80 curl httpbin.org/headers -H "foo: bar"`
 
 4. Another nice-to-have feature, to show Envoy's capabilities as a sidecar proxy. Transparently catch all the traffic inside a pod with the `forward-proxy` container and direct the traffic through the proxy. Use `iptables` for directing the traffic.
