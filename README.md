@@ -4,7 +4,7 @@ This sample shows how [Envoy](https://www.envoyproxy.io) can be used as a generi
 ## Introduction
 Suppose we need a Kubernetes service named `forward-proxy`. The service will be used as a forward proxy to *an arbitrary host*. The service must satisfy the following requirements:
 
-1. The following request should be proxied to `httbin.org/headers`:
+1. The following request should be proxied to `httpbin.org/headers`:
   `curl forward-proxy/headers -H "host: httpbin.org" -H "foo: bar"`
 
 2. The following request should be proxied to https://edition.cnn.com, with TLS origination performed by `forward-proxy`:
