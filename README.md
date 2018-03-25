@@ -147,7 +147,7 @@ Get a shell into the `sleep` container of the `sidecar-forward-proxy` pod:
 * _nginx_forward_proxy_ contains NGINX's configuration and a Dockerfile for NGINX as a forward proxy.
 * _sleep_ contains a Docker file, which extends [the Istio sleep sample](https://github.com/istio/istio/tree/master/samples/sleep), by adding a non-root user.
 
-## Technical details
+## Implementation Details
 * The `allow_absolute_urls` directive of `http1_settings` of `config` of the `http_connection_manager` filter is set to `true`, in the Envoy's configuration of the forward proxy for the other pods, so the other pods could use `forward-proxy` as their `http_proxy`.
 * I set `bind_to_port` to `false` for ports 80 and 443 for the sidecar proxy, while setting `bind_to_port` to `true` for a listener on the port 15001 with `use_original_dst` set to `true`. The outbound traffic in the pod of the sidecar will be directed by _iptables_ to the port 15001, and from there redirected by _Envoy_ to the listeners on the ports 80 and 443.
   Compare it with the forward proxy for the other pods. For that proxy there is no need to listen on the port 15001, and `bind_to_port` is `true` by default for the ports 80 and 443, the Envoy binds to these ports to accept incoming traffic into the `forward_proxy`.
