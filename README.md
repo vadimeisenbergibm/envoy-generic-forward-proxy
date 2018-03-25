@@ -134,10 +134,10 @@ Get a shell into the `sleep` container of the `sidecar-forward-proxy` pod:
 
     * Envoy stats
 
-      * for HTTP: `kubectl exec -it sidecar-forward-proxy -c envoy -- curl localhost:8001/stats | grep http.forward_http.downstream_rq`
+      * for HTTP: `kubectl exec -it sidecar-forward-proxy -c envoy -- curl localhost:8001/stats | grep '^http\.forward_http\.downstream_rq_[1-5]xx'``
 
         Check the number of `http.forward_http.downstream_rq_2xx` - the number of times 2xx code was returned.
-      * for HTTPS: `kubectl exec -it sidecar-forward-proxy -c envoy -- curl localhost:8001/stats | grep http.forward_https.downstream_rq`
+      * for HTTPS: `kubectl exec -it sidecar-forward-proxy -c envoy -- curl localhost:8001/stats | grep '^http\.forward_https\.downstream_rq_[1-5]xx'``
 
         Check the number of `http.forward_https.downstream_rq_2xx` - the number of times 2xx code was returned.
 
