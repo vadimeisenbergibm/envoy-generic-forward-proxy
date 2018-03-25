@@ -30,5 +30,8 @@ docker push ${DOCKER_HUB_USER}/envoy-forward-proxy:latest
 docker build --tag ${DOCKER_HUB_USER}/nginx-forward-proxy:latest nginx_forward_proxy
 docker push ${DOCKER_HUB_USER}/nginx-forward-proxy:latest
 
+docker build --tag ${DOCKER_HUB_USER}/nginx-forward-proxy-without-sni:latest nginx_forward_proxy_without_sni
+docker push ${DOCKER_HUB_USER}/nginx-forward-proxy-without-sni:latest
+
 docker build --tag ${DOCKER_HUB_USER}/sleep:latest sleep
 docker push ${DOCKER_HUB_USER}/sleep:latest
