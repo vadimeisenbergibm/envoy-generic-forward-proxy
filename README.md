@@ -5,16 +5,16 @@ This sample shows how [Envoy](https://www.envoyproxy.io) can be used as a generi
 Suppose we need a Kubernetes service named `forward-proxy`. The service will be used as a forward proxy to *an arbitrary host*. The service must satisfy the following requirements:
 
 1. The following request should be proxied to `httpbin.org/headers`:
-  `curl forward-proxy/headers -H "host: httpbin.org" -H "foo: bar"`
+  `curl forward-proxy/headers -H Host:httpbin.org" -H Foo:bar`
 
 2. The following request should be proxied to https://edition.cnn.com, with TLS origination performed by `forward-proxy`:
-  `curl -v forward-proxy:443 -H "host: edition.cnn.com"`
+  `curl -v forward-proxy:443 -H Host: edition.cnn.com`
 
    Note that the request to the forward proxy is sent over HTTP. The forward proxy opens a TLS connection to
   https://edition.cnn.com .
 
 3. A nice-to-have feature: use `forward-proxy` as HTTP proxy.
-  `http_proxy=forward-proxy:80 curl httpbin.org/headers -H "foo: bar"`
+  `http_proxy=forward-proxy:80 curl httpbin.org/headers -H Foo:bar`
 
 4. Another nice-to-have feature, to show Envoy's capabilities as a sidecar proxy. Transparently catch all the traffic inside a pod with the `forward-proxy` container and direct the traffic through the proxy. Use `iptables` for directing the traffic.
 
@@ -59,11 +59,11 @@ Perform this step if you want to run your own version of the forward proxy. Alte
 ### Test HTTP
 * From any container with curl perform:
 
-  `curl forward-proxy/headers -H "host: httpbin.org" -H "foo: bar"`
+  `curl forward-proxy/headers -H Host:httpbin.org -H Foo:bar`
 
   or, alternatively:
 
-  `http_proxy=forward-proxy:80 curl httpbin.org/headers -H "foo: bar"`
+  `http_proxy=forward-proxy:80 curl httpbin.org/headers -H Foo:bar`
 
 * After each call, check the logs to verify that the traffic indeed went through both Envoy and NGINX:
 
@@ -85,7 +85,7 @@ Perform this step if you want to run your own version of the forward proxy. Alte
       Check the number of `http.forward_https.downstream_rq_2xx` - the number of times 2xx code was returned.
 
 ### Test HTTPS (TLS origination)
-  `curl -v forward-proxy:80 -H "host: edition.cnn.com"`
+  `curl -v forward-proxy:80 -H Host:edition.cnn.com`
 
   will return _301 Moved Permanently_, _location:_ https://edition.cnn.com/ .
 
@@ -95,7 +95,7 @@ Perform this step if you want to run your own version of the forward proxy. Alte
 
   We need to perform TLS origination for cnn.com:
 
-  `curl -v forward-proxy:443 -H "host: edition.cnn.com"`
+  `curl -v forward-proxy:443 -H Host:edition.cnn.com`
 
   or
 
@@ -117,7 +117,7 @@ Get a shell into the `sleep` container of the `sidecar-forward-proxy` pod:
 
 * Test the Envoy proxy with NGINX proxy. Note that here the traffic is catched by iptables and forwarded to the Envoy proxy.
 
-  `curl httpbin.org/headers -H "foo:bar"`
+  `curl httpbin.org/headers -H Foo:bar`
 
   `curl edition.cnn.com:443`
 
@@ -133,7 +133,7 @@ Get a shell into the `sleep` container of the `sidecar-forward-proxy` pod:
       `127.0.0.1 - - [02/Mar/2018:06:32:39 +0000] "GET http://httpbin.org/headers HTTP/1.1" 200 191 "-" "curl/7.47.0"`
 
     * Envoy stats
-    
+
       * for HTTP: `kubectl exec -it sidecar-forward-proxy -c envoy -- curl localhost:8001/stats | grep '^http\.forward_http\.downstream_rq_[1-5]xx'`
 
         Check the number of `http.forward_http.downstream_rq_2xx` - the number of times 2xx code was returned.
@@ -148,7 +148,7 @@ For performance measurements, let's deploy Envoy forward proxy for two predefine
 
 2. From a pod with `curl` installed, perform:
 
-`curl forward-proxy-predefined-hosts/headers  -H "Foo: bar"`
+`curl forward-proxy-predefined-hosts/headers  -H Foo: bar`
 
 3. Perform:
 
@@ -159,7 +159,7 @@ For performance measurements, let's deploy Envoy forward proxy for two predefine
 * _envoy_sidecar_forward_proxy_ contains Envoy's configuration, a Dockerfile and scripts to direct the traffic inside the pod by _iptables_ for the case of the sidecar forward proxy.
 * _nginx_forward_proxy_ contains NGINX's configuration and a Dockerfile for NGINX as a forward proxy.
 * _sleep_ contains a Docker file, which extends [the Istio sleep sample](https://github.com/istio/istio/tree/master/samples/sleep), by adding a non-root user.
-* _envoy_predefined_hosts_forward_proxy_ contains Envoy's configuration and a Dockerfile for the case of the forward proxy for other pods, with two predefined proxied hosts, _httpbin.org_ on the port 80 and _edition.cnn.com_ on the port 443. 
+* _envoy_predefined_hosts_forward_proxy_ contains Envoy's configuration and a Dockerfile for the case of the forward proxy for other pods, with two predefined proxied hosts, _httpbin.org_ on the port 80 and _edition.cnn.com_ on the port 443.
 
 ## Implementation Details
 * The `allow_absolute_urls` directive of `http1_settings` of `config` of the `http_connection_manager` filter is set to `true`, in the Envoy's configuration of the forward proxy for the other pods, so the other pods could use `forward-proxy` as their `http_proxy`.
