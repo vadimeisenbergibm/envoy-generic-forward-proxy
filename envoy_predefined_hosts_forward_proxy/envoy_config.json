@@ -1,0 +1,113 @@
+{
+  "listeners": [
+    {
+      "address": "tcp://0.0.0.0:80",
+      "filters": [
+        {
+          "type": "read",
+          "name": "http_connection_manager",
+          "config": {
+            "codec_type": "auto",
+            "stat_prefix": "forward_http",
+            "http1_settings": {
+              "allow_absolute_url": true
+            },
+            "route_config": {
+              "virtual_hosts": [
+                {
+                  "name": "default_http",
+                  "domains": ["*"],
+                  "routes": [
+                    {
+                      "timeout_ms": 0,
+                      "prefix": "/",
+                        "cluster": "httpbin.org",
+                        "host_rewrite": "httpbin.org"
+                    }
+                  ]
+                }
+              ]
+            },
+            "filters": [
+              {
+                "type": "decoder",
+                "name": "router",
+                "config": {}
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "address": "tcp://0.0.0.0:443",
+      "filters": [
+        {
+          "type": "read",
+          "name": "http_connection_manager",
+          "config": {
+            "codec_type": "auto",
+            "stat_prefix": "forward_https",
+            "http1_settings": {
+              "allow_absolute_url": true
+            },
+            "route_config": {
+              "virtual_hosts": [
+                  {
+                  "name": "default_https",
+                  "domains": ["*"],
+                  "routes": [
+                    {
+                      "timeout_ms": 0,
+                      "prefix": "/",
+                      "cluster": "cnn.com",
+                      "host_rewrite": "edition.cnn.com"
+                    }
+                  ]
+                  }
+              ]
+            },
+            "filters": [
+              {
+                "type": "decoder",
+                "name": "router",
+                "config": {}
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "admin": {
+    "access_log_path": "/tmp/access_log",
+    "address": "tcp://0.0.0.0:8001"
+  },
+  "cluster_manager": {
+      "clusters": [
+          {
+              "name": "httpbin.org",
+              "connect_timeout_ms": 2500,
+              "type": "strict_dns",
+              "lb_type": "round_robin",
+              "hosts": [
+                  {
+                      "url": "tcp://httpbin.org:80"
+                  }
+              ]
+          },
+          {
+              "name": "cnn.com",
+              "connect_timeout_ms": 2500,
+              "type": "strict_dns",
+              "lb_type": "round_robin",
+              "ssl_context": {},
+              "hosts": [
+                  {
+                      "url": "tcp://edition.cnn.com:443"
+                  }
+              ]
+          }
+    ]
+  }
+}
