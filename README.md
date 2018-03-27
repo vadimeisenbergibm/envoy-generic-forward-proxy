@@ -140,6 +140,7 @@ Get a shell into the `sleep` container of the `sidecar-forward-proxy` pod:
       * for HTTPS: `kubectl exec -it sidecar-forward-proxy -c envoy -- curl localhost:8001/stats | grep '^http\.forward_https\.downstream_rq_[1-5]xx'`
 
         Check the number of `http.forward_https.downstream_rq_2xx` - the number of times 2xx code was returned.
+        
 ### Compare with predefined Envoy hosts
 For performance measurements, let's deploy Envoy forward proxy for two predefined hosts, httpbin.org and edition.cnn.com.
 1. Deploy the forward proxy with predefined hosts:
@@ -153,6 +154,14 @@ For performance measurements, let's deploy Envoy forward proxy for two predefine
 3. Perform:
 
 `curl -s forward-proxy-predefined-hosts:443 | grep -o '<title>.*</title>'`
+
+### Performance measurement
+1. Deploy a [fortio](https://github.com/istio/fortio) pod:
+`kubectl apply -f fortio.yaml`
+
+2. Run tests, for example :
+`kubectl exec -it fortio -- fortio load http://forward-proxy-predefined-hosts/headers`
+
 
 ## Code Organization
 * _envoy_forward_proxy_ contains Envoy's configuration and a Dockerfile for the case of the forward proxy for other pods.
