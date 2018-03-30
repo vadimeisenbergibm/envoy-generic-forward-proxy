@@ -30,6 +30,9 @@ docker push ${DOCKER_HUB_USER}/envoy-forward-proxy:latest
 docker build --tag ${DOCKER_HUB_USER}/envoy-predefined-hosts-forward-proxy:latest envoy_predefined_hosts_forward_proxy
 docker push ${DOCKER_HUB_USER}/envoy-predefined-hosts-forward-proxy:latest
 
+docker build --tag ${DOCKER_HUB_USER}/envoy-sidecar-orig-dst-proxy:latest envoy_sidecar_orig_dst_proxy
+docker push ${DOCKER_HUB_USER}/envoy-sidecar-orig-dst-proxy:latest
+
 docker build --tag ${DOCKER_HUB_USER}/nginx-forward-proxy:latest nginx_forward_proxy
 docker push ${DOCKER_HUB_USER}/nginx-forward-proxy:latest
 

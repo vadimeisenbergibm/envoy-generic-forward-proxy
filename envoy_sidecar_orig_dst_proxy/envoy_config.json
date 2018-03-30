@@ -1,0 +1,103 @@
+{
+  "listeners": [
+    {
+      "address": "tcp://0.0.0.0:80",
+      "bind_to_port": false,
+      "filters": [
+        {
+          "type": "read",
+          "name": "http_connection_manager",
+          "config": {
+            "codec_type": "auto",
+            "stat_prefix": "forward_http",
+            "route_config": {
+              "virtual_hosts": [
+                {
+                  "name": "default_http",
+                  "domains": ["*"],
+                  "routes": [
+                    {
+                      "timeout_ms": 0,
+                      "prefix": "/",
+                      "cluster": "forward_proxy_http"
+                    }
+                  ]
+                }
+              ]
+            },
+            "filters": [
+              {
+                "type": "decoder",
+                "name": "router",
+                "config": {}
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "address": "tcp://0.0.0.0:443",
+      "bind_to_port": false,
+      "filters": [
+        {
+          "type": "read",
+          "name": "http_connection_manager",
+          "config": {
+            "codec_type": "auto",
+            "stat_prefix": "forward_https",
+            "route_config": {
+              "virtual_hosts": [
+                  {
+                  "name": "default_https",
+                  "domains": ["*"],
+                  "routes": [
+                    {
+                      "timeout_ms": 0,
+                      "prefix": "/",
+                      "cluster": "forward_proxy_https"
+                    }
+                  ]
+                  }
+              ]
+            },
+            "filters": [
+              {
+                "type": "decoder",
+                "name": "router",
+                "config": {}
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+        "address": "tcp://0.0.0.0:15001",
+        "filters": [],
+        "bind_to_port": true,
+        "use_original_dst": true
+    }
+  ],
+  "admin": {
+    "access_log_path": "/tmp/access_log",
+    "address": "tcp://0.0.0.0:8001"
+  },
+  "cluster_manager": {
+      "clusters": [
+          {
+              "name": "forward_proxy_http",
+              "connect_timeout_ms": 2500,
+              "type": "original_dst",
+              "lb_type": "original_dst_lb"
+          },
+          {
+              "name": "forward_proxy_https",
+              "connect_timeout_ms": 2500,
+              "type": "original_dst",
+              "lb_type": "original_dst_lb",
+              "ssl_context": {}
+          }
+    ]
+  }
+}
