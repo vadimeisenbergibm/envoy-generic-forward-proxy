@@ -159,9 +159,12 @@ For performance measurements, let's deploy Envoy forward proxy for two predefine
 1. Deploy a [fortio](https://github.com/istio/fortio) pod:
 `kubectl apply -f fortio.yaml`
 
-2. Run performance tests, for example: 
+2. Run performance tests, for example:
+
 `kubectl exec -it fortio -- fortio load http://httpbin.org/headers`
+
 `kubectl exec -it fortio -- fortio load http://forward-proxy-predefined-hosts/headers`
+
 `kubectl exec -it fortio -- fortio load -H Host:httpbin.org http://forward-proxy/headers`
 
 3. To check that the hosts are accessed correctly, add `-curl` flag to `fortio load`.
