@@ -161,6 +161,7 @@ For performance measurements, let's deploy Envoy forward proxy for two predefine
 `kubectl apply -f sidecar_orig_dst_proxy.yaml`
 
 2. The pod containsa a [fortio](https://github.com/istio/fortio) container, for perfomance measurements. Perform:
+
 `kubectl exec -it sidecar-orig-dst-proxy -c fortio -- fortio load -curl -H Foo:bar http://httpbin.org/headers`
 
 ### Performance measurement
