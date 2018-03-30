@@ -176,6 +176,8 @@ For performance measurements, let's deploy Envoy forward proxy for two predefine
 * _nginx_forward_proxy_ contains NGINX's configuration and a Dockerfile for NGINX as a forward proxy.
 * _sleep_ contains a Docker file, which extends [the Istio sleep sample](https://github.com/istio/istio/tree/master/samples/sleep), by adding a non-root user.
 * _envoy_predefined_hosts_forward_proxy_ contains Envoy's configuration and a Dockerfile for the case of the forward proxy for other pods, with two predefined proxied hosts, _httpbin.org_ on the port 80 and _edition.cnn.com_ on the port 443.
+* _envoy_sidecar_orig_dst_proxy_ contains Envoy's configuration, a Dockerfile and scripts to direct the traffic inside the pod by _iptables_, for the case where Envoy is standalone generic forward proxy with `original_dst` clusters.
+* _nginx_forward_proxy_standalone_ contains NGINX's configuration and a Dockerfile for NGINX as a standalone forward proxy, without Envoy.
 
 ## Implementation Details
 * The `allow_absolute_urls` directive of `http1_settings` of `config` of the `http_connection_manager` filter is set to `true`, in the Envoy's configuration of the forward proxy for the other pods, so the other pods could use `forward-proxy` as their `http_proxy`.
