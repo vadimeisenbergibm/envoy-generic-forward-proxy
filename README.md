@@ -155,6 +155,14 @@ For performance measurements, let's deploy Envoy forward proxy for two predefine
 
 `curl -s forward-proxy-predefined-hosts:443 | grep -o '<title>.*</title>'`
 
+### Compare with Envoy original_dst cluster without NGINX
+1. Deploy a sidecar Envoy with original_dst cluster, without NGINX:
+
+`kubectl apply -f sidecar_orig_dst_proxy.yaml`
+
+2. The pod containsa a [fortio](https://github.com/istio/fortio) container, for perfomance measurements. Perform:
+`kubectl exec -it sidecar-orig-dst-proxy -c fortio -- fortio load -curl -H Foo:bar http://httpbin.org/headers`
+
 ### Performance measurement
 1. Deploy a [fortio](https://github.com/istio/fortio) pod:
 `kubectl apply -f fortio.yaml`
