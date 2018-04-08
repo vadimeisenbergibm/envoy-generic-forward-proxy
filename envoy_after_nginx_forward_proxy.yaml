@@ -18,9 +18,9 @@ metadata:
   name: forward-proxy-envoy-after-nginx
 spec:
   ports:
-  - port: 80
+  - port: 8081
     name: http
-  - port: 443
+  - port: 8082
     name: https
   - port: 8001 # for envoy statistics
     name: http-envoy-stats
@@ -37,10 +37,10 @@ metadata:
 spec:
   containers:
   - name: nginx
-    image: vadimeisenbergibm/nginx_forward_proxy_before_envoy
+    image: vadimeisenbergibm/nginx-forward-proxy-before-envoy
     securityContext:
       privileged: true
   - name: envoy
-    image: vadimeisenbergibm/envoy-sidecar-orig-dst-proxy
+    image: vadimeisenbergibm/envoy-sidecar-after-nginx
     securityContext:
       privileged: true

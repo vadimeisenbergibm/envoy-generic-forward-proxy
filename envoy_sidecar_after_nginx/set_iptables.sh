@@ -21,8 +21,8 @@ set -o nounset
 
 ENVOY_PORT=$1
 ENVOY_UID=$2
-NGINX_MAIN_UID=$3
-NGINX_WORKER_UID=$4
+HTTP_PORT=$3
+HTTPS_PORT=$4
 
 iptables -t nat -N ISTIO_REDIRECT
 iptables -t nat -A ISTIO_REDIRECT -p tcp -j REDIRECT --to-port $ENVOY_PORT
@@ -31,6 +31,6 @@ iptables -t nat -A PREROUTING -j ISTIO_REDIRECT
 iptables -t nat -N ISTIO_OUTPUT
 iptables -t nat -A OUTPUT -p tcp -j ISTIO_OUTPUT
 iptables -t nat -A ISTIO_OUTPUT -m owner --uid-owner ${ENVOY_UID} -j RETURN
-iptables -t nat -A ISTIO_OUTPUT -m owner --uid-owner ${NGINX_MAIN_UID} -j RETURN
-iptables -t nat -A ISTIO_OUTPUT -m owner --uid-owner ${NGINX_WORKER_UID} -j RETURN
+iptables -t nat -A ISTIO_OUTPUT -p tcp --destination-port ${HTTP_PORT} -j RETURN
+iptables -t nat -A ISTIO_OUTPUT -p tcp --destination-port ${HTTPS_PORT} -j RETURN
 iptables -t nat -A ISTIO_OUTPUT -j ISTIO_REDIRECT
