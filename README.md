@@ -170,7 +170,7 @@ For performance measurements, let's deploy Envoy forward proxy for two predefine
 `kubectl apply -f forward_proxy_nginx.yaml`
 
 2. From a pod with `curl` installed, perform:
-`curl -H Foo:bar -H Host:httpbin.org http://forward-proxy-nginx:8080/headers`
+`curl -H Foo:bar -H Host:httpbin.org http://forward-proxy-nginx/headers`
 
 ### Performance measurement
 1. Deploy a [fortio](https://github.com/istio/fortio) pod:
