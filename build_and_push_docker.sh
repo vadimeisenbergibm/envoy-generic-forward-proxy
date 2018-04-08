@@ -42,5 +42,8 @@ docker push ${DOCKER_HUB_USER}/nginx-forward-proxy-without-sni:latest
 docker build --tag ${DOCKER_HUB_USER}/nginx-forward-proxy-standalone:latest nginx_forward_proxy_standalone
 docker push ${DOCKER_HUB_USER}/nginx-forward-proxy-standalone:latest
 
+docker build --tag ${DOCKER_HUB_USER}/nginx_forward_proxy_before_envoy:latest nginx_forward_proxy_before_envoy
+docker push ${DOCKER_HUB_USER}/nginx_forward_proxy_before_envoy:latest
+
 docker build --tag ${DOCKER_HUB_USER}/sleep:latest sleep
 docker push ${DOCKER_HUB_USER}/sleep:latest
