@@ -18,9 +18,9 @@ metadata:
   name: forward-proxy-nginx
 spec:
   ports:
-  - port: 8080
+  - port: 80
     name: http
-  - port: 8081
+  - port: 443
     name: https
   selector:
     app: forward-proxy-nginx
@@ -35,3 +35,5 @@ spec:
   containers:
   - name: nginx
     image: vadimeisenbergibm/nginx-forward-proxy-standalone
+    securityContext:
+      privileged: true
