@@ -88,24 +88,15 @@
           {
               "name": "forward_proxy_http",
               "connect_timeout_ms": 2500,
-              "type": "static",
-              "lb_type": "round_robin",
-              "hosts": [
-                  {
-                      "url": "tcp://127.0.0.1:8080"
-                  }
-              ]
+              "type": "original_dst",
+              "lb_type": "original_dst_lb"
           },
           {
               "name": "forward_proxy_https",
               "connect_timeout_ms": 2500,
-              "type": "static",
-              "lb_type": "round_robin",
-              "hosts": [
-                  {
-                      "url": "tcp://127.0.0.1:8081"
-                  }
-              ]
+              "type": "original_dst",
+              "lb_type": "original_dst_lb",
+              "ssl_context": {}
           }
     ]
   }
